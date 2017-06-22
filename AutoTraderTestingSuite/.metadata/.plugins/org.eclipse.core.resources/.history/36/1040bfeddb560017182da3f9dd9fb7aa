@@ -1,0 +1,176 @@
+
+package TestingTools;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+
+
+@SuppressWarnings("unused")
+public class SelenniumTestingTools {
+	private static WebDriver driver;
+	public static String SampleUrl = "http://demoqa.com/registration/";
+	public static final Point BROWER_POSITION = new Point(300,0);
+	public static final Dimension SCREEN_SIZE = new Dimension(1920,1080);
+	public static final String CHROME_DRIVER_LOCATION= "C:\\Const\\chromedriver.exe";
+	public static final String GECKO_DRIVER_LOCATION = "C:\\Const\\geckodriver.exe";
+	   /**
+	   * This method takes in a browser type and 
+	   * URL as parameters. It builds a selenium webdriver
+	   * with the appropriate browser and surfs to the Url
+	   * This must be run before any other function can Occur
+	   * @param Browser - Specify firefox or chrome
+	   * @param Url - The Website that is being Surfed to
+	   * @return boolean This returns if the setup was successful
+	   */
+	public static boolean SetupTools(String Browser,String Url) 
+	{
+		boolean returnVal = false;
+		try
+		{
+			if(Browser.equalsIgnoreCase("firefox"))
+			{
+				System.setProperty("webdriver.gecko.driver",GECKO_DRIVER_LOCATION);
+				driver = new FirefoxDriver();
+				SurfToUrl(Url);
+				SampleUrl = Url;
+			}
+			else if(Browser.equalsIgnoreCase("chrome"))
+			{
+				System.setProperty("webdriver.chrome.driver",CHROME_DRIVER_LOCATION);
+				driver = new ChromeDriver();
+				SurfToUrl(Url);
+				SampleUrl = Url;
+			}
+			else if(Browser.equalsIgnoreCase("ie"))
+			{
+				
+			}
+			else if(Browser.equalsIgnoreCase("ie"))
+			{
+				
+			}
+			returnVal = true;
+		}
+		catch (Exception E)
+		{
+			//Log the Exception
+		}
+		driver.manage().window().setPosition(BROWER_POSITION);
+		driver.manage().window().setSize(SCREEN_SIZE);
+		return returnVal;
+	}
+	
+	public static void main(String[] args)
+	{
+			// Finish(); //This Line Closes the browser
+	}
+
+	public static void SendTextToTextboxInputById(String id,String textToSend)
+	{
+		WebElement TextBox = driver.findElement(By.id(id));
+		TextBox.sendKeys(textToSend + Keys.TAB);
+	}
+	
+	public static void ClickTextBoxById(String buttonid)
+	{
+		WebElement button = driver.findElement(By.id(buttonid));
+		button.click();
+	}
+	
+	public static void ClickTextBoxByName(String buttonName)
+	{
+		WebElement button = driver.findElement(By.name(buttonName));
+		button.click();
+	}
+	
+	public static void PressRadioButtonOrCheckbox(String NameOfButtonArray, int buttonToPress)
+	{
+		List<WebElement>  oRadioButton = driver.findElements(By.name(NameOfButtonArray));
+		if(oRadioButton.size() >= buttonToPress)
+		{
+			oRadioButton.get(buttonToPress).click();
+		}
+	}
+	
+	public static void SelectItemInDropDownByValue(String IdOfDropdown, String ValueToSet)
+	{
+        Select dropdown = new Select(driver.findElement(By.id(IdOfDropdown)));
+        List<WebElement> DropDownOptions = dropdown.getOptions();       
+        for(WebElement option : DropDownOptions){
+        	if(option.getText().equals(ValueToSet))
+        	{
+        		option.click();
+        	}
+        }
+	}
+	
+	public static void SelectItemInDropDownByIndex(String IdOfDropdown, int IndexToSet)
+	{
+        Select dropdown = new Select(driver.findElement(By.id(IdOfDropdown)));
+        List<WebElement> DropDownOptions = dropdown.getOptions();
+        DropDownOptions.get(IndexToSet).click();
+	}
+	public static void SelectIteminDropdownWithCssAndIndex(String CssOfDropdown, int IndexToSet)
+	{
+        Select dropdown = new Select(driver.findElement(By.cssSelector(CssOfDropdown)));
+        List<WebElement> DropDownOptions = dropdown.getOptions();
+        DropDownOptions.get(IndexToSet).click();
+	}
+	public static String GetTextAtId(String Id)
+	{
+		return driver.findElement(By.id(Id)).getText();
+	}
+	public static String GetTextAtXpath(String xPath)
+	{
+		return driver.findElement(By.xpath(xPath)).getText();
+	}
+	public static ArrayList<String> GetTextAtMultipleXpaths(String [] xPaths)
+	{
+		ArrayList<String> returnVal = new ArrayList<String>();
+		for(int i =0; i < xPaths.length; i++)
+		{
+			String TextToAdd = GetTextAtXpath(xPaths[i]);
+			returnVal.add(TextToAdd);	
+		}
+		return returnVal;
+	}
+	public static void EnterDataIntoFormById(String []ids, String [] textToEnter)
+	{
+		//we only enter the text if the amount of boxes is the same as the number of Id's
+		if(ids.length == textToEnter.length )
+		{
+			for(int i = 0;i<ids.length;i++)
+			{
+				SendTextToTextboxInputById(ids[i],textToEnter[i]);
+			}
+		}
+	}
+	public static void Finish()
+	{
+		driver.close();
+	}
+	
+	private static void SurfToUrl(String Url)
+	{
+		driver.get(Url);
+	}
+	public static WebDriver getDriver()
+	{
+		return driver;
+	}
+	public static String GetWebSiteTitle()
+	{
+		return driver.getTitle();
+	}
+}

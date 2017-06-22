@@ -1,0 +1,28 @@
+package TestingSuite;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import TestingTools.SelenniumTestingTools;
+
+public class CheckMainPage {
+
+	@Before
+	public void setUp() throws Exception {
+		SelenniumTestingTools.SetupTools("chrome",SelenniumTestingTools.SampleUrl );
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		SelenniumTestingTools.Finish();
+	}
+
+	@Test
+	public void test() {
+		SelenniumTestingTools.GetWebSiteTitle();
+	}
+
+}

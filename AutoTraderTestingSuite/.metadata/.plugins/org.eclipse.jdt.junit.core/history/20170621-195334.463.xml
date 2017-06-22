@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="CheckMainPage" project="AutoTrader" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="TestingSuite.CheckMainPage" time="13.485">
+    <testcase name="tester" classname="TestingSuite.CheckMainPage" time="7.782"/>
+    <testcase name="test" classname="TestingSuite.CheckMainPage" time="5.703"/>
+  </testsuite>
+</testrun>
